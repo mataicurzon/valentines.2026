@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valentine's Gate</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    /* Inline fallback for initial setup */
+    html, body { height:100%; margin:0; padding:0; font-family: 'Poppins', Arial, sans-serif;}
+    body { display:flex; justify-content:center; align-items:center; background:#fff0f6;}
+    .gate-card {
+      background:#fff; border-radius:1.5rem; box-shadow:0 2px 10px #d12c6355;padding:2rem; width:90vw; max-width:350px;
+      display:flex; flex-direction:column; align-items:center;
+    }
+    h1 { color:#d12c63; margin-bottom:1.25em; font-family:'Pacifico',cursive; font-size:2.1rem;}
+    .valentine-heart {font-size:2.5rem;margin-bottom:0.2em;}
+    label {font-size:1.1rem;color:#d12c63;margin-bottom:0.6em;}
+    input[type="text"] { width:100%; font-size:1.1rem; padding:0.7em 1em; border-radius:1em; border:1px solid #d12c6377; margin-bottom:1em;}
+    button { background:#d12c63; color:#fff; border:none; border-radius:1em; font-size:1.1rem; padding:0.7em 2em; cursor:pointer; transition:background 0.15s;}
+    button:active { background:#c22254;}
+    .error-msg{color:#c22254;font-size:1em;margin-top:0.5em;min-height:2em;}
+  </style>
+</head>
+<body>
+  <main class="gate-card">
+    <span class="valentine-heart" aria-hidden="true">💌</span>
+    <h1>Hi there!</h1>
+    <label for="yourName">What's your name?</label>
+    <input id="yourName" type="text" autocomplete="off" maxlength="16" spellcheck="false" autofocus placeholder="Type your name..." />
+    <button id="continueBtn">Continue</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </main>
+  <script src="assets/js/progress.js"></script>
+  <script>
+    // Replace with shared progress.js logic
+    function normalizeName(name) {
+      return name.trim().toLowerCase();
+    }
+    function routeToHub() {
+      window.location.href = 'hub.html';
+    }
+    if (isAccessGranted()) {
+      routeToHub();
+    }
+    document.getElementById('continueBtn').onclick = function () {
+      var name = document.getElementById('yourName').value;
+      if (normalizeName(name) === 'zian') {
+        setAccessGranted();
+        routeToHub();
+      } else {
+        document.getElementById('errorMsg').textContent = 'This is not for you';
+      }
+    };
+    document.getElementById('yourName').addEventListener('keyup', function(e) {
+      if (e.key === 'Enter') document.getElementById('continueBtn').click();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Grand Finale</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    html, body { height:100%; margin:0; padding:0; font-family: 'Poppins',Arial,sans-serif;}
+    body { background: #fff0f6; min-height:100vh;}
+    .page-header {text-align:center; margin:2.2rem 0 1.2rem 0;}
+    .page-header h2 {font-family:'Pacifico',cursive;color:#d12c63;font-size:2.1rem;margin-bottom:0.3em;}
+    .finale-card {
+      background:#fff; border-radius:1.5rem; box-shadow:0 2px 10px #d12c6355;
+      margin:0 auto 1.5em auto; max-width:390px; padding:2.4em 1.3em 2em 1.3em;
+      display:flex; flex-direction:column; align-items:center;
+    }
+    .the-question {font-size:1.45rem; color:#c22254; margin-bottom:2em; font-family:'Pacifico',cursive;}
+    .btns {display:flex;gap:1.5em;}
+    button {font-size:1.1em;padding:0.7em 2.6em;border:none;border-radius:1.2em;background:#d12c63;color:#fff;cursor:pointer;transition:background 0.15s;}
+    button:active {background:#c22254;}
+    .btn-no.wrong {animation:shake 0.3s;}
+    @keyframes shake {
+      0% { transform: translateX(0);}
+      26% {transform:translateX(-12px);}
+      48% {transform:translateX(10px);}
+      75% {transform:translateX(-6px);}
+      100% { transform: translateX(0);}
+    }
+    .confetti {margin:1.7em auto; font-size:2.2em; display:none;}
+    .finale-msg {color:#c22254; font-size:1.13em; margin-top:1.4em;text-align:center;}
+    .error-msg{color:#c22254;font-size:1.06em;margin-top:1.2em;text-align:center;min-height:1.6em;}
+    .to-hub-link{margin-top:2em;text-align:center;}
+    .to-hub-link a { color:#d12c63; text-decoration:none;font-weight:600;font-size:1em;}
+    @media (max-width:480px) {
+      .finale-card {padding:1.1em 0.5em 1.9em 0.5em;}
+      .page-header h2 {font-size:1.36em;}
+      .the-question {font-size:1.05em;}
+    }
+  </style>
+</head>
+<body>
+  <nav class="to-hub-link">
+    <a href="hub.html">← Back to Hub</a>
+  </nav>
+  <section class="page-header">
+    <h2>The Grand Finale</h2>
+  </section>
+  <main class="finale-card">
+    <div class="the-question">Will you be my Valentine?</div>
+    <div class="btns">
+      <button class="btn-yes" id="yesBtn">Yes</button>
+      <button class="btn-no" id="noBtn">No</button>
+    </div>
+    <div class="confetti" id="confetti">🎉🎉🎉</div>
+    <div class="finale-msg" id="finaleMsg"></div>
+    <div class="error-msg" id="errorMsg"></div>
+  </main>
+  <script src="assets/js/progress.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script>
+    // Shared progress.js access gating
+    guardAccess();
+    if (!isAllComplete()) window.location.href = 'hub.html';
+    // Yes/No logic
+    var yesBtn = document.getElementById('yesBtn');
+    var noBtn = document.getElementById('noBtn');
+    var finaleMsg = document.getElementById('finaleMsg');
+    var errorMsg = document.getElementById('errorMsg');
+    var confettiBanner = document.getElementById('confetti');
+    yesBtn.onclick = function() {
+      yesBtn.disabled = true; noBtn.disabled = true;
+      if (window.confetti) confetti(2400);
+      confettiBanner.style.display = "block";
+      finaleMsg.textContent = "Yay!! Happy Valentine's 💖💖💖";
+      errorMsg.textContent = "";
+      setTimeout(() => { confettiBanner.style.display = "none"; }, 2500);
+    };
+    noBtn.onclick = function() {
+      errorMsg.textContent = "Wrong answer, try again";
+      noBtn.classList.remove('wrong');
+      setTimeout(()=>noBtn.classList.add('wrong'),0);
+    };
+  </script>
+</body>
+</html>

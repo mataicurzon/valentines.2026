@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Valentine's Challenge Hub</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    html, body { height:100%;margin:0;padding:0;font-family: 'Poppins',Arial,sans-serif;}
+    body { background: #fff0f6; min-height:100vh; }
+    .hub-header { text-align:center; margin:2.5rem 0 1.2rem 0; }
+    .hub-header h1 {
+      color:#d12c63; font-family:'Pacifico',cursive;font-size:2.3rem;margin:0 0 0.3em 0;
+    }
+    .hub-header p {color:#c22254;font-size:1.12rem;margin-top:0;}
+    .challenge-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:1.3rem; max-width:700px;margin:0 auto; padding:0 8vw 2rem 8vw;
+    }
+    .challenge-card {
+      background:#fff; border-radius:1.5rem; box-shadow:0 2px 10px #d12c6355;
+      display:flex; flex-direction:column; align-items:center; padding:2rem 1rem 1.2rem 1rem;
+      min-height:200px; cursor:pointer; position:relative;transition:box-shadow .16s;
+    }
+    .challenge-card.locked { opacity:0.57; pointer-events:none;filter: grayscale(60%) blur(0.5px);}
+    .challenge-card.completed { border:2.1px solid #ff7eb8;}
+    .challenge-icon { font-size:2.4rem; margin-bottom:0.2em;}
+    .challenge-title {color:#d12c63; font-weight:600;font-size:1.1rem; margin-bottom:0.5em;}
+    .challenge-status {font-size:1.03rem;}
+    .lock-overlay {
+      position:absolute; top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.7);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      border-radius:inherit;font-size:2.5rem; color:#c22254; font-weight:800;pointer-events:none;
+      z-index:3;
+    }
+    /* Responsive tweaks */
+    @media (max-width:480px) {
+      .challenge-grid { grid-template-columns:1fr; padding:0 4vw 2rem 4vw; }
+      .challenge-card { padding:1.3rem 0.5rem 1.1rem 0.5rem;}
+      .hub-header h1 {font-size:1.73rem;}
+    }
+  </style>
+</head>
+<body>
+  <section class="hub-header">
+    <h1>💕 Valentine’s Challenge Hub 💕</h1>
+    <p>Complete the 3 fun challenges below to unlock the grand finale!</p>
+  </section>
+  <main class="challenge-grid">
+    <div class="challenge-card" id="wordleCard" tabindex="0">
+      <span class="challenge-icon">🔤</span>
+      <span class="challenge-title">Wordle</span>
+      <span class="challenge-status" id="wordleStatus">Not started</span>
+    </div>
+    <div class="challenge-card" id="basketballCard" tabindex="0">
+      <span class="challenge-icon">🏀</span>
+      <span class="challenge-title">Basketball</span>
+      <span class="challenge-status" id="basketballStatus">Not started</span>
+    </div>
+    <div class="challenge-card" id="wordsearchCard" tabindex="0">
+      <span class="challenge-icon">🔎</span>
+      <span class="challenge-title">Word Search</span>
+      <span class="challenge-status" id="wordsearchStatus">Not started</span>
+    </div>
+    <div class="challenge-card locked" id="finaleCard" tabindex="-1">
+      <span class="challenge-icon">💖</span>
+      <span class="challenge-title">Final Question</span>
+      <span class="challenge-status">Locked</span>
+      <div class="lock-overlay"><span>🔒</span></div>
+    </div>
+  </main>
+  <script src="assets/js/progress.js"></script>
+  <script>
+    // Use shared progress.js logic
+    guardAccess();
+    const progress = getProgress();
+    function statusText(val) {
+      return val ? "Completed" : "Not started";
+    }
+    document.getElementById('wordleStatus').textContent = statusText(progress.wordle);
+    document.getElementById('basketballStatus').textContent = statusText(progress.basketball);
+    document.getElementById('wordsearchStatus').textContent = statusText(progress.wordsearch);
+
+    document.getElementById('wordleCard').onclick = function() { window.location.href='wordle.html'; };
+    document.getElementById('basketballCard').onclick = function() { window.location.href='basketball.html'; };
+    document.getElementById('wordsearchCard').onclick = function() { window.location.href='wordsearch.html'; };
+
+    if (isAllComplete()) {
+      const finaleCard = document.getElementById('finaleCard');
+      finaleCard.classList.remove('locked');
+      finaleCard.lastElementChild.style.display = 'none';
+      finaleCard.setAttribute('tabindex', '0');
+      finaleCard.onclick = function() { window.location.href='finale.html'; };
+      finaleCard.querySelector('.challenge-status').textContent = "Unlocked!";
+      finaleCard.style.cursor = 'pointer';
+    }
+  </script>
+</body>
+</html>

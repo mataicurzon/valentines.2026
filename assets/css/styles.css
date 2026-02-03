@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
+
+/* Valentine's Day Theme */
+:root {
+  --pink-bg: #fff0f6;
+  --main-pink: #d12c63;
+  --main-pink-dark: #c22254;
+  --light-pink: #f7c7e2;
+  --focus-outline: #ff7eb8;
+  --accent-shadow: 0 2px 10px #d12c6355;
+}
+html, body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: var(--pink-bg);
+  font-family: 'Poppins', Arial, sans-serif;
+  font-size: 18px;
+  color: var(--main-pink-dark);
+}
+body {
+  background: var(--pink-bg);
+}
+
+a, a:visited {
+  color: var(--main-pink);
+  text-decoration: underline;
+  transition: color 0.12s;
+}
+a:hover {
+  color: var(--main-pink-dark);
+}
+nav a {
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--main-pink);
+}
+
+input[type="text"], input[type="search"], input[type="password"] {
+  border: 1.5px solid var(--main-pink);
+  border-radius: 1em;
+  padding: 0.7em 1em;
+  width: 100%;
+  font-size: 1.08em;
+  margin-bottom: 1em;
+  background: #fff;
+  transition: border-color 0.14s;
+  outline: none;
+}
+input[type="text"]:focus, input[type="search"]:focus, input[type="password"]:focus {
+  border-color: var(--focus-outline);
+  box-shadow: 0 0 0 2px var(--focus-outline)33;
+}
+
+button {
+  background: var(--main-pink);
+  color: #fff;
+  border: none;
+  border-radius: 1em;
+  font-size: 1.08em;
+  padding: 0.7em 2em;
+  cursor: pointer;
+  font-family: 'Poppins', Arial, sans-serif;
+  transition: background .13s, box-shadow .13s;
+  box-shadow: 0 1.5px 7px #ff7eb844;
+}
+button:active {
+  background: var(--main-pink-dark);
+}
+
+h1, h2, h3 {
+  font-family: 'Pacifico', cursive;
+  color: var(--main-pink);
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: -1.2px;
+}
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.4rem; }
+
+label {
+  font-size: 1.06rem;
+  color: var(--main-pink);
+}
+.error-msg, .finale-msg {
+  min-height: 1.4em;
+  color: var(--main-pink-dark);
+  font-size: 1.01em;
+}
+
+.gate-card,
+.game-card,
+.finale-card,
+.challenge-card {
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: var(--accent-shadow);
+  margin: 0 auto;
+  padding: 2.2em 1.2em 1.5em 1.2em;
+}
+
+@media (max-width: 480px) {
+  html, body { font-size: 16.2px; }
+  h1 { font-size: 1.37rem; }
+  h2 { font-size: 1.1rem; }
+  .gate-card, .game-card, .finale-card, .challenge-card { padding: 1.2em 0.5em 1.1em 0.5em; }
+}
+
+/* Smooth transitions and affordances for mobile */
+button, input, .gate-card, .game-card, .finale-card, .challenge-card {
+  -webkit-tap-highlight-color: rgba(209,44,99,0.09);
+  transition: box-shadow 0.17s, background 0.12s;
+}
+
+/* Wordle styles */
+.w-row { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; }
+.w-cell {
+  width: 56px; height: 56px; display:flex; align-items:center; justify-content:center;
+  border-radius: 10px; border: 2px solid #ffd1e6; font-weight:700; color:#d12c63; background:#fff;
+}
+@media (max-width:480px){ .w-cell { width: 48px; height: 48px; } }
+.w-cell[data-state="correct"] { background:#6aaa64; color:#fff; border-color:#6aaa64; }
+.w-cell[data-state="present"] { background:#c9b458; color:#fff; border-color:#c9b458; }
+.w-cell[data-state="absent"] { background:#787c7e; color:#fff; border-color:#787c7e; }
+.w-key { background:#ffe2ef; color:#d12c63; border-radius:10px; border:none; padding:10px 8px; font-weight:600; }
+
+/* Word search styles */
+.ws-grid { display:grid; gap:6px; user-select:none; touch-action:none; }
+.ws-cell { width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid #ffd1e6; border-radius:6px; color:#d12c63; font-weight:600; }
+@media (max-width:480px){ .ws-cell { width:24px; height:24px; } }
+.ws-cell.selected { background:#f7c7e2; }
+.ws-cell.found { background:#6aaa64; color:#fff; border-color:#6aaa64; }
+.ws-list { margin-top:10px; color:#c22254; font-size:0.98em; }
+.ws-list li.found { text-decoration: line-through; color:#6aaa64; }
