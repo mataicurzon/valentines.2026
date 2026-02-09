@@ -16,7 +16,10 @@
       display:flex; flex-direction:column; align-items:center;
     }
     .the-question {font-size:1.45rem; color:#c22254; margin-bottom:2em; font-family:'Pacifico',cursive;}
-    .btns {display:flex;gap:1.5em;}
+    .btns {display:flex;gap:1.5em;justify-content:center;align-items:center;}
+    .btns .btn-no { transition: opacity .3s ease, width .3s ease, margin .3s ease, padding .3s ease; }
+    .btns.solo .btn-no { opacity:0; width:0; margin:0; padding:0; border:0; overflow:hidden; pointer-events:none; }
+    .btns .btn-yes { transition: margin .35s ease; }
     button {font-size:1.1em;padding:0.7em 2.6em;border:none;border-radius:1.2em;background:#d12c63;color:#fff;cursor:pointer;transition:background 0.15s;}
     button:active {background:#c22254;}
     .btn-no.wrong {animation:shake 0.3s;}
@@ -68,11 +71,55 @@
     var finaleMsg = document.getElementById('finaleMsg');
     var errorMsg = document.getElementById('errorMsg');
     var confettiBanner = document.getElementById('confetti');
+    var btns = document.querySelector('.btns');
+
+    function burstFromButton(btn){
+      const rect = btn.getBoundingClientRect();
+      const centerX = rect.left + rect.width/2 + window.scrollX;
+      const centerY = rect.top + rect.height/2 + window.scrollY;
+      const emojis = ["💐","🌸","🌷","💖","💕","💝","🌹","✨"];
+      for (let i=0;i<26;i++){
+        const s = document.createElement('span');
+        s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        s.style.cssText = `position:fixed;left:${centerX}px;top:${centerY}px;transform:translate(-50%,-50%);font-size:${1+Math.random()*1.6}em;pointer-events:none;z-index:500;animation:burst${i} ${0.8+Math.random()*0.6}s ease-out forwards;`;
+        const dx = (Math.random()-0.5)*220; const dy = (Math.random()-0.5)*160;
+        const rot = (Math.random()*120-60);
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes burst${i}{0%{opacity:1;transform:translate(-50%,-50%) scale(0.8) rotate(0deg);}70%{transform:translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(1.1) rotate(${rot}deg);}100%{opacity:0;transform:translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(0.9) rotate(${rot}deg);}}`;
+        document.head.appendChild(style);
+        document.body.appendChild(s);
+        setTimeout(()=>{ s.remove(); style.remove(); }, 1600);
+      }
+    }
+
+    function rainHearts(durationMs=2600){
+      const emojis=["💖","💕","💝","🌸","🌷","🌹"];
+      const end = Date.now()+durationMs;
+      const spawn = ()=>{
+        if (Date.now()>end) return;
+        const sp = document.createElement('span');
+        sp.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        sp.style.cssText = `position:fixed;left:${Math.random()*96}vw;top:-2.1em;font-size:${1+Math.random()*1.6}em;pointer-events:none;z-index:400;animation:fall${Math.random().toString(36).slice(2)} ${1.8+Math.random()*1.2}s linear forwards;`;
+        const name = sp.style.animation.match(/fall([^ ]+)/)[1];
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes fall${name}{100%{top:93vh;opacity:0.7;transform:translateX(${(Math.random()-0.5)*60}px) rotate(${Math.random()*120-60}deg);}}`;
+        document.head.appendChild(style);
+        document.body.appendChild(sp);
+        setTimeout(()=>{ sp.remove(); style.remove(); }, 3300);
+        requestAnimationFrame(spawn);
+      };
+      spawn();
+    }
+
     yesBtn.onclick = function() {
       yesBtn.disabled = true; noBtn.disabled = true;
+      // Center the Yes button and hide No with a smooth transition
+      btns.classList.add('solo');
       if (window.confetti) confetti(2400);
+      burstFromButton(yesBtn);
+      rainHearts(3200);
       confettiBanner.style.display = "block";
-      finaleMsg.textContent = "Yay!! Happy Valentine's 💖💖💖";
+      finaleMsg.textContent = "Yay!! Happy Valentine's Stinky!! 💖💖💖";
       errorMsg.textContent = "";
       setTimeout(() => { confettiBanner.style.display = "none"; }, 2500);
     };
