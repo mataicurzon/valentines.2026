@@ -38,20 +38,27 @@
     }
   }
 
-  const KEYS = [
-    'Q','W','E','R','T','Y','U','I','O','P',
-    'A','S','D','F','G','H','J','K','L',
-    'ENTER','Z','X','C','V','B','N','M','DEL'
+  // Virtual keyboard like iOS: 3 rows, Enter/Del enlarged, staggered key row
+  const KB_ROWS = [
+    ['Q','W','E','R','T','Y','U','I','O','P'],
+    ['A','S','D','F','G','H','J','K','L'],
+    ['ENTER','Z','X','C','V','B','N','M','DEL']
   ];
   function initKeyboard(){
     kbEl.innerHTML = '';
-    KEYS.forEach(k => {
-      const b = document.createElement('button');
-      b.className = 'w-key';
-      b.textContent = k;
-      b.dataset.key = k;
-      b.onclick = () => handleKey(k);
-      kbEl.appendChild(b);
+    KB_ROWS.forEach((row, i) => {
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'w-kb-row';
+      if(i===1) rowDiv.style.marginLeft = '18px'; // iOS keyboard staggered effect
+      row.forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'w-key' + ((k === 'ENTER' || k === 'DEL') ? ' big' : '');
+        b.textContent = (k === 'DEL') ? '⌫' : (k === 'ENTER' ? '↵' : k);
+        b.dataset.key = k;
+        b.onclick = () => handleKey(k);
+        rowDiv.appendChild(b);
+      });
+      kbEl.appendChild(rowDiv);
     });
   }
 
