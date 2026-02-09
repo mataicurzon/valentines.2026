@@ -362,8 +362,19 @@
 
   canvas.addEventListener('mousedown', e=> pointerDown(e.offsetX, e.offsetY));
   canvas.addEventListener('mouseup', e=> pointerUp(e.offsetX, e.offsetY));
-  canvas.addEventListener('touchstart', e=>{ const t=e.changedTouches[0]; const rect=canvas.getBoundingClientRect(); pointerDown(t.clientX-rect.left, t.clientY-rect.top); });
-  canvas.addEventListener('touchend', e=>{ const t=e.changedTouches[0]; const rect=canvas.getBoundingClientRect(); pointerUp(t.clientX-rect.left, t.clientY-rect.top); });
+  // On mobile, prevent viewport scrolling while interacting
+  canvas.addEventListener('touchstart', e=>{
+    e.preventDefault();
+    const t=e.changedTouches[0]; const rect=canvas.getBoundingClientRect(); pointerDown(t.clientX-rect.left, t.clientY-rect.top);
+  }, {passive:false});
+  canvas.addEventListener('touchend', e=>{
+    e.preventDefault();
+    const t=e.changedTouches[0]; const rect=canvas.getBoundingClientRect(); pointerUp(t.clientX-rect.left, t.clientY-rect.top);
+  }, {passive:false});
+  canvas.addEventListener('touchmove', e=>{
+    // Prevent scroll and rubber-banding during drags
+    e.preventDefault();
+  }, {passive:false});
 
   // LED utilities
   function drawLedStrip(x, y, w, h){
@@ -404,11 +415,11 @@
     ctx.shadowBlur = 0;
   }
   function drawScoreboard(score){
-    // Panel dimensions
+    // Panel dimensions (centered at top)
     const pad = 8;
     const w = Math.max(84, canvas.width*0.26);
     const h = 44;
-    const x = canvas.width - w - pad;
+    const x = Math.round((canvas.width - w) / 2);
     const y = pad;
     // Panel background with dark frame
     const bg = ctx.createLinearGradient(0,y,0,y+h);
@@ -426,12 +437,13 @@
     // Label
     ctx.fillStyle = '#8fffb0';
     ctx.font = 'bold 10px Poppins, Arial, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText('SCORE', x+10, y+14);
+    ctx.textAlign = 'center';
+    ctx.fillText('SCORE', x + w/2, y+14);
     // Digits centered in panel
     const text = String(score);
     const s = 12; // scale per digit
-    let cx = x + w - 14 - (text.length * (s*1.2));
+    const total = text.length * (s*1.2);
+    let cx = x + (w/2) - (total/2) + s*0.6;
     for (const ch of text){
       drawSevenSegmentColor(cx, y + h/2 + 4, s, ch, 'rgba(110,255,90,0.95)');
       cx += s*1.2;
